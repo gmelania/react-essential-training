@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useReducer } from "react";
 import "./App.css";
 import chef from "./images/chef.jpg";
 
@@ -48,19 +48,22 @@ function Main({ dishes, openStatus, onStatus }) {
 }
 
 function App() {
-  const [status, setStatus] = useState(false);
+  // const [status, setStatus] = useState(false);
+  const [status, toggle] = useReducer((status) => !status, true);
+
+  useEffect(() => {
+    console.log(`Il cafe e ${status ? "aperto" : "chiuso"}.`);
+  }, [status]);
 
   return (
     <div>
       <h2>
         Cafe di Melania e {status == false ? "chiuso" : "aperto"} al momento.
       </h2>
-      <button onClick={() => setStatus(!status)}>
-        {status ? "Chiudere" : "Aprire"} il Cafe
-      </button>
+      <button onClick={toggle}>{status ? "Chiudere" : "Aprire"} il Cafe</button>
 
       <Header name="Alex" year={new Date().getFullYear()} />
-      <Main dishes={dishObjects} openStatus={status} onStatus={setStatus} />
+      <Main dishes={dishObjects} openStatus={status} onStatus={toggle} />
     </div>
   );
 }
